@@ -77,4 +77,14 @@ router.post('/login',
     }
 )
 
+router.post('/logout', (req, res) => {
+  res.clearCookie('token', {
+    httpOnly: true,
+    sameSite: 'lax',
+    secure: false
+  });
+  res.redirect('/user/login');
+});
+
+
 module.exports = router;

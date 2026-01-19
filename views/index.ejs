@@ -10,56 +10,71 @@
 
   <style>
     body { background-color: #131314; }
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #131314; }
+    ::-webkit-scrollbar-thumb { background: #333537; border-radius: 10px; }
   </style>
 </head>
 
 <body class="text-gray-200 font-sans">
 
+  <form action="/user/logout" method="POST" class="fixed top-6 right-8 z-50">
   <button
-    class="bg-[#28292a] hover:bg-[#333537] m-8 px-6 py-4 rounded-2xl text-white shadow-lg flex items-center gap-3 fixed z-50 cursor-pointer border border-[#444746]"
+    type="submit"
+    class="flex items-center gap-2 bg-[#1e1f20] border border-[#444746] px-4 py-2 rounded-xl text-red-400 hover:bg-[#28292a] hover:text-red-300 transition">
+    <i class="ri-logout-box-r-line"></i>
+    Logout
+  </button>
+</form>
+
+  <button
+    class="bg-[#28292a] hover:bg-[#333537] m-8 px-6 py-4 rounded-2xl text-white shadow-lg flex items-center gap-3 fixed bottom-8 right-8 sm:bottom-auto sm:right-auto sm:top-0 sm:left-0 z-50 cursor-pointer border border-[#444746] transition-all"
     onclick="openPopup()">
     <i class="ri-add-line text-2xl text-blue-400"></i>
     <span class="font-medium">New Upload</span>
   </button>
 
-  <div class="pt-32 px-10">
+  <div class="pt-32 px-10 pb-20">
+    <h1 class="text-xl font-medium mb-8 text-gray-400">Your Cloud Files</h1>
+    
     <% if (files.length === 0) { %>
-      <p class="text-gray-500 text-center">No files uploaded yet</p>
+      <div class="flex flex-col items-center justify-center py-20 border-2 border-dashed border-[#28292a] rounded-3xl">
+        <i class="ri-folder-open-line text-6xl text-gray-700 mb-4"></i>
+        <p class="text-gray-500 text-lg">Your drive is empty</p>
+      </div>
     <% } %>
 
-    <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6">
+    <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-6">
       <% files.forEach(file => { %>
-        <div class="bg-[#1e1f20] border border-[#444746] rounded-xl p-4 hover:bg-[#28292a] transition group">
+        <div class="bg-[#1e1f20] border border-[#444746] rounded-2xl p-4 hover:border-blue-500/50 hover:bg-[#202124] transition-all group relative">
 
-          <div class="flex justify-center">
-            <i class="ri-file-cloud-line text-5xl text-blue-400"></i>
+          <div class="flex justify-center py-6 bg-[#131314] rounded-xl mb-4">
+            <i class="ri-file-cloud-line text-5xl text-blue-400/80 group-hover:text-blue-400 transition-colors"></i>
           </div>
 
-          <p class="mt-4 text-sm truncate text-center">
+          <p class="text-sm truncate text-center font-medium text-gray-300" title="<%= file.originalName %>">
             <%= file.originalName %>
           </p>
 
-          <div class="flex justify-center gap-4 mt-4 opacity-0 group-hover:opacity-100 transition">
+          <div class="flex justify-center gap-5 mt-4 opacity-0 group-hover:opacity-100 transition-all transform translate-y-2 group-hover:translate-y-0">
+            
+            <a href="<%= file.path %>" 
+               download="<%= file.originalName %>"
+               class="text-blue-400 hover:text-blue-300 text-xl transition-colors"
+               title="Download">
+              <i class="ri-download-2-line"></i>
+            </a>
 
- 
-  <a
-    href="<%= file.path %>?fl_attachment=true"
-    class="text-blue-400 hover:text-blue-300 text-lg"
-    title="Download">
-    <i class="ri-download-2-line"></i>
-  </a>
+            <form action="/delete/<%= file._id %>" method="POST" onsubmit="return confirm('Delete this file permanently?')">
+              <button
+                type="submit"
+                class="text-red-400/70 hover:text-red-400 text-xl transition-colors cursor-pointer"
+                title="Delete">
+                <i class="ri-delete-bin-line"></i>
+              </button>
+            </form>
 
-  
-  <form action="/delete/<%= file._id %>" method="POST">
-    <button
-      type="submit"
-      class="text-red-400 hover:text-red-300 text-lg"
-      title="Delete">
-      <i class="ri-delete-bin-line"></i>
-    </button>
-  </form>
-
-</div>
+          </div>
         </div>
       <% }) %>
     </div>
@@ -67,41 +82,43 @@
 
   <div
     id="backdrop"
-    class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-[60]">
+    class="hidden fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-[60]">
 
     <form action="/upload" method="POST" enctype="multipart/form-data" class="relative">
 
       <button type="button"
-        class="absolute -top-12 right-0 text-gray-400 hover:text-white"
+        class="absolute -top-12 right-0 text-gray-400 hover:text-white transition-colors"
         onclick="closePopup()">
         <i class="ri-close-line text-3xl"></i>
       </button>
 
-      <div class="w-[450px] bg-[#1e1f20] p-8 rounded-3xl border border-[#444746] shadow-2xl">
+      <div class="w-[90vw] max-w-[450px] bg-[#1e1f20] p-8 rounded-3xl border border-[#444746] shadow-2xl">
         <h2 class="text-xl mb-6 font-normal">Upload files</h2>
 
         <label for="dropzone-file"
-          class="flex flex-col items-center justify-center w-full h-64 bg-[#131314] border-2 border-dashed border-[#444746] rounded-2xl cursor-pointer hover:bg-[#28292a] transition">
+          class="flex flex-col items-center justify-center w-full h-64 bg-[#131314] border-2 border-dashed border-[#444746] rounded-2xl cursor-pointer hover:bg-[#28292a] hover:border-blue-500/50 transition-all group">
 
-          <div class="flex flex-col items-center justify-center pt-5 pb-6">
-            <i class="ri-upload-cloud-2-line text-4xl text-blue-400 mb-3"></i>
+          <div class="flex flex-col items-center justify-center pt-5 pb-6 text-center">
+            <div class="p-4 rounded-full bg-blue-500/10 mb-4 group-hover:scale-110 transition-transform">
+                <i class="ri-upload-cloud-2-line text-4xl text-blue-400"></i>
+            </div>
             <p class="mb-2 text-sm text-gray-300">
               <span class="font-semibold text-blue-400">Click to upload</span> or drag and drop
             </p>
-            <p class="text-xs text-gray-500">Any file up to 5MB</p>
+            <p id="file-chosen" class="text-xs text-gray-500">Maximum file size: 10MB</p>
           </div>
 
-          <input id="dropzone-file" type="file" name="file" class="hidden" required />
+          <input id="dropzone-file" type="file" name="file" class="hidden" required onchange="displayFileName(this)" />
         </label>
 
         <div class="flex justify-end gap-3 mt-8">
           <button type="button"
             onclick="closePopup()"
-            class="px-6 py-2 text-blue-400 hover:bg-blue-400/10 rounded-full">
+            class="px-6 py-2 text-blue-400 hover:bg-blue-400/10 rounded-full font-medium transition-colors">
             Cancel
           </button>
           <button
-            class="bg-blue-600 hover:bg-blue-500 px-8 py-2 rounded-full text-white shadow-md">
+            class="bg-blue-600 hover:bg-blue-500 px-8 py-2 rounded-full text-white font-medium shadow-md transition-all">
             Upload
           </button>
         </div>
@@ -111,6 +128,7 @@
 
   <script>
     const backdrop = document.getElementById('backdrop');
+    const fileChosenText = document.getElementById('file-chosen');
 
     function openPopup() {
       backdrop.classList.remove('hidden');
@@ -118,6 +136,14 @@
 
     function closePopup() {
       backdrop.classList.add('hidden');
+      fileChosenText.innerText = "Maximum file size: 10MB";
+    }
+
+    function displayFileName(input) {
+        if (input.files && input.files[0]) {
+            fileChosenText.innerText = "Selected: " + input.files[0].name;
+            fileChosenText.classList.replace('text-gray-500', 'text-blue-300');
+        }
     }
 
     backdrop.addEventListener('click', (e) => {
