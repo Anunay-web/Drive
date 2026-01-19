@@ -11,6 +11,10 @@ const fileSchema = new mongoose.Schema({
         type:String,
         required:[true, 'Original file name is required']
     },
+    publicId: {
+    type: String,
+    required: [true, 'Cloudinary publicId is required'],
+  },
     user:{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'user',
