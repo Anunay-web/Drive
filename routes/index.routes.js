@@ -3,7 +3,7 @@ const router = express.Router();
 const upload = require('../middlewares/multer');
 const fileModel = require('../models/files.model');
 const authmiddleware = require('../middlewares/authe');
-const cloudinary = require('../config/cloudinary'); // ✅ REQUIRED
+const cloudinary = require('../config/cloudinary'); 
 
 router.get('/', authmiddleware, async (req, res) => {
   const userFiles = await fileModel.find({
@@ -14,15 +14,29 @@ router.get('/', authmiddleware, async (req, res) => {
 });
 
 router.post('/upload', authmiddleware, upload.single('file'), async (req, res) => {
+  if (!req.file) {
+    return res.status(400).send('No file uploaded');
+  }
+
+  const resourceType = req.file.mimetype.startsWith('image/')
+    ? 'image'
+    : req.file.mimetype.startsWith('video/')
+    ? 'video'
+    : req.file.mimetype.startsWith('pdf/')
+    ? 'pdf'
+    : 'raw';
+
   await fileModel.create({
     path: req.file.path,
     originalName: req.file.originalname,
     publicId: req.file.filename,
+    resourceType: resourceType, 
     user: req.user.userId
   });
 
   res.redirect('/');
 });
+
 
 router.post('/delete/:id', authmiddleware, async (req, res) => {
   try {
@@ -40,7 +54,7 @@ router.post('/delete/:id', authmiddleware, async (req, res) => {
 
 
     await cloudinary.uploader.destroy(file.publicId, {
-      resource_type: 'raw'
+      resource_type: file.resourceType
     });
 
 
