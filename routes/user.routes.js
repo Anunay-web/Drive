@@ -30,7 +30,7 @@ router.post('/register',
     })
 
 
-    res.json(newUser);
+    res.redirect('/user/login');
 })
 
 router.get('/login',(req,res)=>{
@@ -72,8 +72,8 @@ router.post('/login',
     )
 
     //we send it to frontend in cookies
-        res.cookie('token',token);
-    res.send('Logged in successfully');
+    res.cookie('token',token);
+    res.redirect('/');
     }
 )
 

@@ -1,34 +1,76 @@
 <!doctype html>
-<html>
-  <head>
+<html class="dark">
+<head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <link href="https://cdn.jsdelivr.net/npm/flowbite@4.0.1/dist/flowbite.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.8.0/fonts/remixicon.css" rel="stylesheet" />
+    <style>
+        body { background-color: #131314; }
+    </style>
+</head>
+<body class="h-screen w-screen flex justify-center items-center text-gray-200 font-sans">
 
-  </head>
-  <body class="bg-gray-900 h-screen w-screen flex justify-center items-center text-white">
-    
-<form
-class="w-96"
-action="/user/login"
- method="post">
-        <div class="mb-6">
-            <label for="username" class="block mb-2.5 text-sm font-medium text-heading">Username</label>
-            <input type="text" id="username"
-            name="username" 
-            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-sm focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body text-black" placeholder="John" required />
+    <div class="w-full max-w-md px-6">
+        <div class="text-center mb-10">
+            <div class="inline-flex items-center justify-center w-16 h-16 bg-blue-600/10 rounded-2xl mb-4 border border-blue-500/20">
+                <i class="ri-cloud-line text-4xl text-blue-400"></i>
+            </div>
+            <h1 class="text-3xl font-semibold text-white">Welcome back</h1>
+            <p class="text-gray-400 mt-2">Enter your details to access your drive</p>
         </div>
-    <div class="mb-6">
-        <label for="password" class="block mb-2.5 text-sm font-medium text-heading">Password</label>
-        <input type="password" id="password" 
-        name="password"
-        class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-sm focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body text-black" placeholder="•••••••••" required />
-    </div> 
-    
-    <button type="submit" class="text-black bg-white box-border border border-transparent hover:bg-brand-strong focus:ring-4 focus:ring-brand-medium shadow-xs font-medium leading-5 rounded-sm text-sm px-4 py-2.5 focus:outline-none">Submit</button>
-</form>
 
-    <script src="https://cdn.jsdelivr.net/npm/flowbite@4.0.1/dist/flowbite.min.js"></script>
-  </body>
+        <div class="bg-[#1e1f20] p-8 rounded-3xl border border-[#444746] shadow-2xl">
+            <form action="/user/login" method="post" class="space-y-6">
+                
+                <div>
+                    <label for="username" class="block mb-2 text-sm font-medium text-gray-300">Username</label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none">
+                            <i class="ri-user-line text-gray-500"></i>
+                        </div>
+                        <input type="text" id="username" name="username" 
+                            class="bg-[#131314] border border-[#444746] text-white text-sm rounded-xl focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 block w-full pl-11 p-3 transition-all placeholder:text-gray-600 outline-none" 
+                            placeholder="username" required />
+                    </div>
+                </div>
+
+                <div>
+                    <label for="password" class="block mb-2 text-sm font-medium text-gray-300">Password</label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none">
+                            <i class="ri-lock-line text-gray-500"></i>
+                        </div>
+                        <input type="password" id="password" name="password"
+                            class="bg-[#131314] border border-[#444746] text-white text-sm rounded-xl focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 block w-full pl-11 p-3 transition-all placeholder:text-gray-600 outline-none" 
+                            placeholder="•••••••••" required />
+                    </div>
+                </div>
+
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center">
+                        <input id="remember" type="checkbox" class="w-4 h-4 rounded bg-[#131314] border-[#444746] text-blue-600 focus:ring-blue-500">
+                        <label for="remember" class="ml-2 text-sm text-gray-400">Remember me</label>
+                    </div>
+                    <a href="#" class="text-sm text-blue-400 hover:underline">Forgot password?</a>
+                </div>
+
+                <button type="submit" 
+                    class="w-full text-white bg-blue-600 hover:bg-blue-500 focus:ring-4 focus:outline-none focus:ring-blue-800 font-medium rounded-xl text-sm px-5 py-3.5 text-center transition-all shadow-lg shadow-blue-900/20">
+                    Sign In
+                </button>
+
+                <p class="text-center text-sm text-gray-400 mt-4">
+                    Don't have an account? 
+                    <a href="/user/register" class="text-blue-400 font-medium hover:underline ml-1">Create one</a>
+                </p>
+            </form>
+        </div>
+
+        <p class="text-center text-gray-600 text-xs mt-8">
+            &copy; 2026 YourCloud Storage. All rights reserved.
+        </p>
+    </div>
+
+</body>
 </html>
