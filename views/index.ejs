@@ -1,67 +1,126 @@
 <!doctype html>
 <html class="dark">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <link href="https://cdn.jsdelivr.net/npm/flowbite@4.0.1/dist/flowbite.min.css" rel="stylesheet" />
-    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.8.0/fonts/remixicon.css" rel="stylesheet" />
-    <style>
-      body { background-color: #131314; }
-    </style>
-  </head>
-  <body class="text-gray-200 font-sans">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <button class="bg-[#28292a] hover:bg-[#333537] m-8 px-6 py-4 rounded-2xl text-white shadow-lg flex items-center gap-3 transition-all fixed z-50 cursor-pointer border border-[#444746]"
-      onclick="popup()">
-      <i class="ri-add-line text-2xl text-blue-400"></i>
-      <span class="font-medium">New Upload</span>
-    </button>
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 
-    <div id="backdrop" class="hidden h-screen bg-black/60 backdrop-blur-sm w-screen flex items-center justify-center fixed z-[60]">
-        
-      <form action="/home" method="post" enctype="multipart/form-data" class="relative">
-        <button type="button" class="absolute -top-12 -right-0 text-gray-400 hover:text-white transition-colors" onclick="closepop()">
-          <i class="ri-close-line text-3xl"></i>
-        </button>
+  <link href="https://cdn.jsdelivr.net/npm/flowbite@4.0.1/dist/flowbite.min.css" rel="stylesheet" />
 
-        <div class="pop w-[450px] bg-[#1e1f20] p-8 rounded-3xl border border-[#444746] shadow-2xl">
-          <h2 class="text-xl mb-6 font-normal">Upload files</h2>
-          
-          <label for="dropzone-file" class="flex flex-col items-center justify-center w-full h-64 bg-[#131314] border-2 border-dashed border-[#444746] rounded-2xl cursor-pointer hover:bg-[#28292a] hover:border-blue-500/50 transition-all group">
-              <div class="flex flex-col items-center justify-center pt-5 pb-6">
-                  <div class="p-4 rounded-full bg-blue-500/10 mb-4 group-hover:scale-110 transition-transform">
-                    <svg class="w-10 h-10 text-blue-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                      <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 17h3a3 3 0 0 0 0-6h-.025a5.56 5.56 0 0 0 .025-.5A5.5 5.5 0 0 0 7.207 9.021C7.137 9.017 7.071 9 7 9a4 4 0 1 0 0 8h2.167M12 19v-9m0 0-2 2m2-2 2 2"/>
-                    </svg>
-                  </div>
-                  <p class="mb-2 text-sm text-gray-300"><span class="font-semibold text-blue-400">Click to upload</span> or drag and drop</p>
-                  <p class="text-xs text-gray-500">SVG, PNG, JPG or GIF (MAX. 800x400px)</p>
-              </div>
-              <input id="dropzone-file" type="file" class="hidden" name="file" />
-          </label>
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.8.0/fonts/remixicon.css" rel="stylesheet" />
 
-          <div class="flex justify-end gap-3 mt-8">
-            <button type="button" onclick="closepop()" class="px-6 py-2 text-blue-400 hover:bg-blue-400/10 rounded-full font-medium transition-colors">Cancel</button>
-            <button class="bg-blue-600 hover:bg-blue-500 px-8 py-2 rounded-full text-white font-medium transition-all shadow-md">Upload</button>
+  <style>
+    body { background-color: #131314; }
+  </style>
+</head>
+
+<body class="text-gray-200 font-sans">
+
+  <button
+    class="bg-[#28292a] hover:bg-[#333537] m-8 px-6 py-4 rounded-2xl text-white shadow-lg flex items-center gap-3 transition-all fixed z-50 cursor-pointer border border-[#444746]"
+    onclick="openPopup()">
+    <i class="ri-add-line text-2xl text-blue-400"></i>
+    <span class="font-medium">New Upload</span>
+  </button>
+
+  <div class="pt-32 px-10">
+    <% if (files.length === 0) { %>
+      <p class="text-gray-500 text-center">No files uploaded yet</p>
+    <% } %>
+
+    <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6">
+      <% files.forEach(file => { %>
+        <div class="bg-[#1e1f20] border border-[#444746] rounded-xl p-4 hover:bg-[#28292a] transition group">
+
+          <div class="flex justify-center">
+            <i class="ri-file-cloud-line text-5xl text-blue-400"></i>
           </div>
-        </div> 
-      </form>
+
+          <p class="mt-4 text-sm truncate text-center">
+            <%= file.originalName %>
+          </p>
+
+          <div class="flex justify-center gap-4 mt-4 opacity-0 group-hover:opacity-100 transition">
+            <a
+              href="<%= file.path %>"
+              target="_blank"
+              class="text-blue-400 hover:text-blue-300 text-lg"
+              title="Open">
+              <i class="ri-external-link-line"></i>
+            </a>
+          </div>
+        </div>
+      <% }) %>
     </div>
+  </div>
 
-    <script>
-        const backdrop = document.getElementById('backdrop');
+  <div
+    id="backdrop"
+    class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-[60]">
 
-        function popup(){
-            backdrop.classList.remove('hidden');
-        }
-        function closepop(){
-            backdrop.classList.add('hidden');
-        }
-        backdrop.addEventListener('click', (e) => {
-          if (e.target === backdrop) closepop();
-        });
-    </script>
+    <form action="/upload" method="POST" enctype="multipart/form-data" class="relative">
 
-  </body>
+      <button type="button"
+        class="absolute -top-12 right-0 text-gray-400 hover:text-white"
+        onclick="closePopup()">
+        <i class="ri-close-line text-3xl"></i>
+      </button>
+
+      <div class="w-[450px] bg-[#1e1f20] p-8 rounded-3xl border border-[#444746] shadow-2xl">
+        <h2 class="text-xl mb-6 font-normal">Upload files</h2>
+
+        <label for="dropzone-file"
+          class="flex flex-col items-center justify-center w-full h-64 bg-[#131314] border-2 border-dashed border-[#444746] rounded-2xl cursor-pointer hover:bg-[#28292a] hover:border-blue-500/50 transition-all group">
+
+          <div class="flex flex-col items-center justify-center pt-5 pb-6">
+            <div class="p-4 rounded-full bg-blue-500/10 mb-4 group-hover:scale-110 transition-transform">
+              <svg class="w-10 h-10 text-blue-400" xmlns="http://www.w3.org/2000/svg" fill="none"
+                viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                  d="M15 17h3a3 3 0 0 0 0-6h-.025A5.5 5.5 0 0 0 7 9a4 4 0 0 0 0 8h2m3 2V10m0 0-2 2m2-2 2 2" />
+              </svg>
+            </div>
+
+            <p class="mb-2 text-sm text-gray-300">
+              <span class="font-semibold text-blue-400">Click to upload</span> or drag and drop
+            </p>
+            <p class="text-xs text-gray-500">Any file up to 5MB</p>
+          </div>
+
+          <input id="dropzone-file" type="file" name="file" class="hidden" required />
+        </label>
+
+        <div class="flex justify-end gap-3 mt-8">
+          <button type="button"
+            onclick="closePopup()"
+            class="px-6 py-2 text-blue-400 hover:bg-blue-400/10 rounded-full font-medium">
+            Cancel
+          </button>
+          <button
+            class="bg-blue-600 hover:bg-blue-500 px-8 py-2 rounded-full text-white font-medium shadow-md">
+            Upload
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <script>
+    const backdrop = document.getElementById('backdrop');
+
+    function openPopup() {
+      backdrop.classList.remove('hidden');
+    }
+
+    function closePopup() {
+      backdrop.classList.add('hidden');
+    }
+
+    backdrop.addEventListener('click', (e) => {
+      if (e.target === backdrop) closePopup();
+    });
+  </script>
+
+</body>
 </html>
