@@ -52,9 +52,7 @@ router.post('/login',
             username: username
         })
         if(!user){
-            return res.status(400).json({
-                message: "username or password is incorrect"
-            })
+            return res.render('password', { error: 'Username or password is incorrect' });
         }
         const isMatch = await bcrypt.compare(password, user.password);
         if(!isMatch){
